@@ -1,0 +1,7 @@
+bundle_install
+.sscprc
+.bash_history
+config/*
+run.sh
+!config/app_default.rb
+!config/app.rb.dist

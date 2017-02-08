@@ -1,0 +1,13 @@
+ruby:
+#  image: bitnami/ruby:latest
+  container_name: proxy-slack
+  hostname: proxy-slack
+  build: .
+  command: "sh -c 'bundle install && ruby script.rb'"
+  volumes:
+    - .:/app
+    # cache ruby lib files
+    - ./.bash_history:/root/.bash_history
+    - /root/.gem
+    - /root/.bundle/cache
+    - /opt/bitnami/ruby/lib/ruby/gems

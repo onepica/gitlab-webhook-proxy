@@ -1,0 +1,37 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    configatron (4.5.0)
+    gitlab (3.7.0)
+      httparty (~> 0.13.0)
+      terminal-table
+    httparty (0.13.7)
+      json (~> 1.8)
+      multi_xml (>= 0.5.2)
+    json (1.8.6)
+    multi_xml (0.6.0)
+    rack (1.6.4)
+    rack-protection (1.5.3)
+      rack
+    sinatra (1.4.7)
+      rack (~> 1.5)
+      rack-protection (~> 1.4)
+      tilt (>= 1.3, < 3)
+    slack-notifier (1.5.1)
+    terminal-table (1.7.3)
+      unicode-display_width (~> 1.1.1)
+    tilt (2.0.2)
+    unicode-display_width (1.1.3)
+
+PLATFORMS
+  ruby
+  x64-mingw32
+
+DEPENDENCIES
+  configatron
+  gitlab
+  sinatra
+  slack-notifier
+
+BUNDLED WITH
+   1.12.5

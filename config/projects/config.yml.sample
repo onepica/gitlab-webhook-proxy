@@ -1,0 +1,14 @@
+receivers:
+  slack:
+    BE: '#mgt-example-be'
+    FE: '#mgt-example-fe'
+teams:
+  BE:
+  - 'user.aaa'
+  - 'user.bbb'
+  FE:
+  - 'user.ccc'
+labels:
+  # Format: LABEL: TEAM_NAME
+  FE: FE
+  BE: BE

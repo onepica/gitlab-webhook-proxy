@@ -1,0 +1,14 @@
+**Project: <%= "#{data['repository']['name']}" %>**
+Kind:  <%= "#{data['object_kind']}" %>
+Title: <%= "#{data['object_attributes']['title']}" %>
+Assignee ID: <%= "#{data['object_attributes']['assignee_id']}" %>
+Action: <%= "#{data['object_attributes']['action']}" %>
+User: <%= "#{data['user']['name']}" %> (<%= "#{data['user']['username']}" %>)
+Branches: <%= "#{data['object_attributes']['source_branch']}" %> => <%= "#{data['object_attributes']['target_branch']}" %>
+In progress: <%= "#{data['object_attributes']['work_in_progress'].to_s}" %>
+Merge Status: <%= "#{data['object_attributes']['merge_status']}" %>
+State: <%= "#{data['object_attributes']['state']}" %>
+Description: <%= "#{data['object_attributes']['description']}" %>
+---
+<%= "#{data['object_attributes']['url']}" %>
+
