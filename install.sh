@@ -14,5 +14,3 @@ readonly __dir __file
 
 #bundle install --path ${__dir}/bundle_install
 bundle install --system || bundle update --system
-
-rails g casein:install
