@@ -12,4 +12,7 @@ __dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 __file="${__dir}/$(basename "${BASH_SOURCE[0]}")"
 readonly __dir __file
 
-bundle install --path ${__dir}/bundle_install
+#bundle install --path ${__dir}/bundle_install
+bundle install --system || bundle update --system
+
+rails g casein:install

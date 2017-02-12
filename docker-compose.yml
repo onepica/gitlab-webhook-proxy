@@ -1,13 +1,29 @@
-ruby:
-#  image: bitnami/ruby:latest
-  container_name: proxy-slack
-  hostname: proxy-slack
-  build: .
-  command: "sh -c 'bundle install && ruby script.rb'"
-  volumes:
-    - .:/app
-    # cache ruby lib files
-    - ./.bash_history:/root/.bash_history
-    - /root/.gem
-    - /root/.bundle/cache
-    - /opt/bitnami/ruby/lib/ruby/gems
+version: '2'
+services:
+  ruby:
+  #  image: bitnami/ruby:latest
+    container_name: proxy-slack
+    hostname: proxy-slack
+    build: .
+    command: "bash run.sh"
+    volumes:
+      - .:/code
+      # cache ruby lib files
+      - ./.bash_history:/root/.bash_history
+      - /root/.gem
+      - /root/.bundle/cache
+      - /opt/bitnami/ruby/lib/ruby/gems
+  nginx:
+    container_name: proxy-slack_nginx
+    hostname: proxy-slack-nginx
+    image: nginx:1.10
+    volumes:
+      - ./site-nginx.conf:/etc/nginx/conf.d/default.conf
+    links:
+      - 'ruby:webapp'
+    ports:
+      - '80:80'
+#  sqlite:
+#    image: tcgerlach/sqlite:latest
+#    container_name: proxy-slack_sqlite
+#    command: sqlite
