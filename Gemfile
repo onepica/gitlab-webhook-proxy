@@ -10,3 +10,10 @@ gem 'sinatra'
 gem 'gitlab'
 
 gem 'configatron'
+
+# Gem for re-run web server on update scripts
+gem 'rerun'
+
+# gem 'thor', '0.19.1'
+# gem 'rails', '~>5.0.0'
+gem 'casein', '~>5.2.0'
