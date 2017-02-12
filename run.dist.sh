@@ -15,5 +15,6 @@ readonly __dir __file
 export APP_SLACK_WEBHOOK='https://hooks.slack.com/services/QWEQWE/QWEQWE/QWEQWEQWEQWEQWEQWE'
 export APP_GITLAB_PRIVATE_TOKEN='QWEQWEQWEQWEQWEQWE'
 export APP_GITLAB_ENDPOINT='https://git.example.com/api/v3'
+export APP_WEB_PORT=8088
 
 ruby ${__dir}/server.rb -o 0.0.0.0
