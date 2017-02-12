@@ -38,7 +38,6 @@ module GitlabHook
     def self.process_gitlab_webhook
       begin
         output = ''
-        @response.set_error 'aaa'
         @request_data = read_data
 
         GitlabHook::Project::init(
