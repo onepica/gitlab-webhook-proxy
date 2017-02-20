@@ -9,24 +9,26 @@ module GitlabHook
     # Send message to Slack
     #
     # @param data
-    # @param options [Hash] receiver:, username:
+    # @param options [Hash] receiver:, username:, :template
     #
     def send(data, options)
-      slack_client(options).ping(
-        load_message(data, options)
-      )
+      message = load_message data: data, options[:template]
+      slack_client(options).ping(message)
     end
 
+    # @param [Hash] options
     # @return [Slack::Notifier]
     def slack_client(options)
-      slack_webhook_url='https://hooks.slack.com/services/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'
-      Slack::Notifier.new slack_webhook_url, options do
+        Slack::Notifier.new options[:webhook_url] || configatron.app.slack.webhook_url,
+                            options do
         defaults  username: 'GitLabHook'
       end
     end
 
+    # @param [Hash] data
+    # @param [String] template
     # @return [String]
-    def load_message(data, template: nil)
+    def load_message(data:, template: nil)
       @data = data
       ERB.new(template ? template : fetch_template).result(binding)
     end
@@ -42,7 +44,7 @@ module GitlabHook
       end
 
       File.read(
-        File.expand_path(configatron.app.path.templates + 'slack/message.erb')
+        File.expand_path(configatron.app.path.templates + '/slack/message.erb')
       )
     end
   end
