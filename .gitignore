@@ -1,3 +1,4 @@
+bundle_global_gems
 bundle_install
 .sscprc
 .bash_history
