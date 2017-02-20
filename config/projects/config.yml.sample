@@ -4,15 +4,17 @@
 receivers:
   slack:
     # slack receivers for teams
-    BE: '#mgt-example-be'
-    FE: '#mgt-example-fe'
+    BE: '#some-group-be'
+    FE: '#some-group-fe'
 teams:
+  # declare teammates if they haven't declared globally
   BE:
   - 'user.aaa'
   - 'user.bbb'
   FE:
   - 'user.ccc'
 labels:
+  # Define association for labels to teams
   # Format: LABEL: TEAM_NAME
   FE: FE
   BE: BE
