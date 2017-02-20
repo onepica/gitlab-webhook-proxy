@@ -27,7 +27,10 @@ RUN echo \
   && sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config \
   && sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd \
   && echo "export VISIBLE=now" >> /etc/profile \
+  && echo 'root:dev' | chpasswd \
   && touch /container_files/authorized_keys \
-  && cat /container_files/authorized_keys > /root/authorized_keys \
-  && cat /container_files/id_rsa.pub >> /root/authorized_keys \
+  && mkdir -p /root/.ssh \
+  && cat /container_files/authorized_keys > /root/.ssh/authorized_keys \
+  && cat /container_files/id_rsa.pub >> /root/.ssh/authorized_keys \
+  && chmod go-rwx -R /root/.ssh \
 
