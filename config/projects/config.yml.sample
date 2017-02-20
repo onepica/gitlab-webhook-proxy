@@ -1,5 +1,9 @@
+# Create the same file config.yml by GitLab path.
+# If your repository URL is example.com/some/repo.git
+# in this case it will be some/repo/config.yml
 receivers:
   slack:
+    # slack receivers for teams
     BE: '#mgt-example-be'
     FE: '#mgt-example-fe'
 teams:
