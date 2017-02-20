@@ -12,17 +12,21 @@ services:
       - ./.bash_history:/root/.bash_history
       - /root/.gem
       - /root/.bundle/cache
-      - /opt/bitnami/ruby/lib/ruby/gems
-  nginx:
-    container_name: proxy-slack_nginx
-    hostname: proxy-slack-nginx
-    image: nginx:1.10
-    volumes:
-      - ./site-nginx.conf:/etc/nginx/conf.d/default.conf
-    links:
-      - 'ruby:webapp'
+      - './bundle_global_gems:/usr/local/bundle/gems'
+      - '/usr/local/bundle'
     ports:
-      - '80:80'
+      - '5744:22'
+      - '5802:80'
+#  nginx:
+#    container_name: proxy-slack_nginx
+#    hostname: proxy-slack-nginx
+#    image: nginx:1.10
+#    volumes:
+#      - ./site-nginx.conf:/etc/nginx/conf.d/default.conf
+#    links:
+#      - 'ruby:webapp'
+#    ports:
+#      - '5802:80'
 #  sqlite:
 #    image: tcgerlach/sqlite:latest
 #    container_name: proxy-slack_sqlite

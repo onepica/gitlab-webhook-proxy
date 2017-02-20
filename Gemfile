@@ -15,7 +15,15 @@ gem 'configatron'
 gem 'rerun'
 
 # web CMS
-gem 'waitress-core'
+# gem 'waitress-core'
+
+# Yaml file validator
+# http://www.kuwata-lab.com/kwalify/ruby/users-guide.01.html#schema
+gem 'kwalify'
+
+# User Autorization
+# https://github.com/binarylogic/authlogic
+gem 'authlogic'
 
 # gem 'thor', '0.19.1'
 # gem 'rails', '~>5.0.0'
