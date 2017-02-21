@@ -1,0 +1,28 @@
+<div class="container">
+  <table class="table">
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Action/s</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @projects.each do |project| %>
+      <tr>
+        <td><%= project.id %></td>
+        <td>
+          <a href="<%= project.web_url %>">
+            <%= project.name %>
+          </a>
+        </td>
+        <td>
+          <a href="/app/project/config/<%= project.id %>">
+            Configure
+          </a>
+        </td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>

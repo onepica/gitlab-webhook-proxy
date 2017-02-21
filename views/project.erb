@@ -1,4 +1,18 @@
-<form action='/project/view' method='post' class="form-inline well">
-  <input type="text" name='project' placeholder="project" autofocus>
-  <input class="btn primary" type='submit' value='go'>
-</form>
+<style>
+  #project_configuration {
+    font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
+  }
+</style>
+
+<div class="form-group">
+<a href="/app/project" class="btn btn-info" role="button">Back</a>
+</div>
+
+<h1><%= @project.name %></h1>
+<div class="form-group">
+  <label for="project_configuration">Configuration file content:</label>
+  <textarea class="form-control" rows="20" id="project_configuration"><%= @content%></textarea>
+</div>
+<div class="form-group">
+  <a href="/app/project" class="btn btn-info" role="button">Back</a>
+</div>

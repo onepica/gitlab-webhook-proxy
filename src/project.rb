@@ -19,13 +19,15 @@ module GitlabHook
       @project_code        = @project.sub(/[^A-z0-9]+/, '_').downcase
       @project_config_file = configatron.app.path.base.projects + '/' + @project + '/config.yml'
 
-
       # read config
-      configatron.projects[@project_code] = GitlabHook::Config::read @project_config_file
+      configatron.projects[@project_code]          = GitlabHook::Config::read @project_config_file
+      configatron.projects[@project_code + '_raw'] = GitlabHook::Config::read_raw @project_config_file
 
       # validate config existence
       if configatron.projects[@project_code].nil?
-        raise GitlabHook::Error, sprintf('Project configuration file "%s" not found.', @project_config_file)
+        raise GitlabHook::Error,
+              sprintf('Project configuration file "%s" not found.',
+                      @project_config_file)
       end
     end
 
@@ -34,6 +36,17 @@ module GitlabHook
         raise GitlabHook::Error, 'Project is not defined.'
       end
       configatron.projects[@project_code]
+    end
+
+    def config_raw
+      if @project_code.nil? or configatron.projects[@project_code].nil?
+        raise GitlabHook::Error, 'Project is not defined.'
+      end
+      configatron.projects[@project_code + '_raw']
+    end
+
+    def config_sample_raw
+      GitlabHook::Config::read_raw configatron.app.path.base.projects + '/config.yml.sample'
     end
 
     def team_by_label(label)

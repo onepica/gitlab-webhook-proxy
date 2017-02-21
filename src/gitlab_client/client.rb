@@ -4,6 +4,7 @@ require 'configatron'
 module GitlabHook
   module GitlabClient
     module Client
+      module_function
       # @return Gitlab::Client
       def gitlab(token)
         Gitlab.client(
@@ -17,8 +18,7 @@ module GitlabHook
       end
 
       def user_name(id)
-        gitlab(configatron.app.gitlab.super.private_token)
-          .user(id).username
+        gitlab_super.user(id).username
       end
     end
   end

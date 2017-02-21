@@ -1,6 +1,9 @@
-# Create the same file config.yml by GitLab path.
-# If your repository URL is example.com/some/repo.git
-# in this case it will be some/repo/config.yml
+#- Create the same file config.yml by GitLab path.
+#- If your repository URL is example.com/some/repo.git
+#- in this case it will be some/repo/config.yml
+# This is a sample of project configuration in YAML format
+# All comments started with "#" will be removed
+# Please keep indents, they are part of syntax
 receivers:
   slack:
     # slack receivers for teams
@@ -9,12 +12,12 @@ receivers:
 teams:
   # declare teammates if they haven't declared globally
   BE:
-  - 'user.aaa'
-  - 'user.bbb'
+  - 'john.doe'
+  - 'dave.brown'
   FE:
-  - 'user.ccc'
+  - 'hanna.light'
 labels:
-  # Define association for labels to teams
+  # Define team association for labels
   # Format: LABEL: TEAM_NAME
   FE: FE
   BE: BE

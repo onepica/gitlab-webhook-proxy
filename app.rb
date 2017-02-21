@@ -77,6 +77,29 @@ get '/logout' do
 end
 
 get '/app/project' do
+  require_relative 'src/gitlab_client/client'
+  # Gitlab::PaginatedResponse
+  @projects = GitlabHook::GitlabClient::Client::gitlab(session[:auth][:token]).projects
+  erb :projects
+end
 
-  erb 'This is a secret place that only <%=session[:identity]%> <%= session[:auth]%> <%= request.cookies%> has access to!'
+get '/app/project/config/:id' do
+  require_relative 'src/gitlab_client/client'
+  # Gitlab::PaginatedResponse
+  @project = GitlabHook::GitlabClient::Client::gitlab(session[:auth][:token]).project params['id']
+  @project_path = @project.web_url
+
+  begin
+    require_relative 'src/project'
+    GitlabHook::Project::init(
+      URI(@project.web_url).path
+    )
+    @content = GitlabHook::Project::config_raw
+  rescue GitlabHook::Error => e
+    @content = GitlabHook::Project::config_sample_raw
+                 .gsub(/^#-[^\n\r]*/m, '')
+                 .gsub(/[\n]{2,}/m, '')
+  end
+
+  erb :project
 end
