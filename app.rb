@@ -44,14 +44,17 @@ before '/app/*' do
   end
 end
 
+# --------------------
 get '/' do
   erb :index
 end
 
+# --------------------
 get '/login/form' do
   erb :login_form
 end
 
+# --------------------
 post '/login/attempt' do
   session[:identity] = params['username']
 
@@ -69,18 +72,21 @@ post '/login/attempt' do
   redirect to (session[:previous_url] || '/')
 end
 
+# --------------------
 get '/logout' do
   session.delete(:identity)
   session.delete(:auth)
   erb "<div class='alert alert-message'>Logged out</div>"
 end
 
+# --------------------
 get '/app/project' do
   # Gitlab::PaginatedResponse
   @projects = GitlabHook::GitlabClient::Client::gitlab(session[:auth][:token]).projects
   erb :projects
 end
 
+# --------------------
 get '/app/project/config/:id' do
   until params['id']
     redirect to (session[:previous_url] || '/')
@@ -105,6 +111,7 @@ get '/app/project/config/:id' do
   erb :project
 end
 
+# --------------------
 post '/app/project/save/config' do
   until params['id']
     redirect to (session[:previous_url] || '/')
@@ -121,6 +128,7 @@ post '/app/project/save/config' do
   redirect to (session[:previous_url] || '/')
 end
 
+# --------------------
 get '/app/user' do
   @user = GitlabHook::GitlabClient::Client::gitlab(session[:auth][:token]).user
   @user_config = GitlabHook::User.new(@user.id, data: @user)
@@ -132,6 +140,7 @@ get '/app/user' do
   erb :user
 end
 
+# --------------------
 get '/app/user/edit' do
   # Gitlab::PaginatedResponse
   @user = GitlabHook::GitlabClient::Client::gitlab(session[:auth][:token]).user
@@ -144,6 +153,7 @@ get '/app/user/edit' do
   erb :user_edit
 end
 
+# --------------------
 post '/app/user/save/config' do
   @user = GitlabHook::GitlabClient::Client::gitlab(session[:auth][:token]).user
 
@@ -154,6 +164,7 @@ post '/app/user/save/config' do
   redirect to '/app/user'
 end
 
+# --------------------
 post '/inbound' do
   require_relative 'src/inbound'
 

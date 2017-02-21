@@ -24,6 +24,7 @@ module GitlabHook
 
     # @param [Hash] options
     # @return [Slack::Notifier]
+
     def slack_client(options)
       url = options[:webhook_url] || configatron.app.slack.webhook_url
       Slack::Notifier.new url,
@@ -39,6 +40,7 @@ module GitlabHook
     # @param [Hash] data
     # @param [String] template
     # @return [String]
+    #
     def load_message(data:, template: nil)
       @data = data
       ERB.new(template ? template : fetch_template).result(binding)
@@ -50,9 +52,10 @@ module GitlabHook
     # @return [String]
     #
     def fetch_template
-      if GitlabHook::Project::config['template']
-        return GitlabHook::Project::config['template']
-      end
+      # Due to security reason, it cannot use templates outside until it will be fixed
+      # if GitlabHook::Project::config['template']
+      #   return GitlabHook::Project::config['template']
+      # end
 
       File.read(
         File.expand_path(configatron.app.path.templates + '/slack/message.erb')
