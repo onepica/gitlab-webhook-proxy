@@ -153,3 +153,27 @@ post '/app/user/save/config' do
   # redirect the user back
   redirect to '/app/user'
 end
+
+post '/inbound' do
+  require_relative 'src/inbound'
+
+  begin
+    output = ''
+    if request.body.nil? or request.body.empty?
+      return 'error: Invalid request.'
+    end
+    request_data = JSON.parse request.body
+
+    GitlabHook::Project::init(
+      URI(request_data['repository']['homepage']).path
+    )
+    GitlabHook::Inbound.new.forward request_data
+  rescue GitlabHook::Error => e
+    response.status = 404
+    output = "error [#{e.class}]: #{e.message}\n#{e.backtrace}"
+  rescue => e
+    response.status = 503
+    output = "error [#{e.class}]: #{e.message}\n#{e.backtrace}"
+  end
+  output
+end
