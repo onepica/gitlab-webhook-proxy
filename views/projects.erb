@@ -1,14 +1,22 @@
+<style>
+  .table .flag {
+    text-align: center;
+  }
+  .table .last-right {
+    text-align: right;
+  }
+</style>
 <div class="form-group">
   <h1>Projects</h1>
-  <p>Projects list according to access of by your account.</p>
+  <p>Projects list according to access by your account.</p>
 </div>
 <div class="container">
   <table class="table">
     <thead>
     <tr>
       <th>Name</th>
-      <th>Configured</th>
-      <th>Extra</th>
+      <th class="flag">Configured</th>
+      <th class="last-right">Extra</th>
     </tr>
     </thead>
     <tbody>
@@ -19,15 +27,14 @@
             <%= project.name %>
           </a>
         </td>
-        <td>
+        <td class="flag">
           <% if project_has_config project then %>
             <div class="glyphicon glyphicon-ok"></div>
           <% end %>
         </td>
-        <td>
-          <a href="<%= project.web_url %>">
-            Home page
-          </a>
+        <td class="last-right">
+          <a href="<%= project.web_url %>">Home page</a> /
+          <a href="<%= project.web_url %>/hooks">Webhooks</a>
         </td>
       </tr>
     <% end %>
