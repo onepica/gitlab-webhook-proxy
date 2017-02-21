@@ -7,11 +7,11 @@ services:
     build: .
     command: "bash run.sh"
     volumes:
-      - .:/code
+      - '.:/code'
       # cache ruby lib files
-      - ./.bash_history:/root/.bash_history
-      - /root/.gem
-      - /root/.bundle/cache
+      - './.bash_history:/root/.bash_history'
+      - '/root/.gem'
+      - '/root/.bundle/cache'
       - './bundle_global_gems:/usr/local/bundle/gems'
       - '/usr/local/bundle'
     ports:
