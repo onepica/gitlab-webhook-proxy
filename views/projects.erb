@@ -1,8 +1,11 @@
+<div class="form-group">
+  <h1>Projects</h1>
+  <p>Projects list according to access of by your account.</p>
+</div>
 <div class="container">
   <table class="table">
     <thead>
     <tr>
-      <th>ID</th>
       <th>Name</th>
       <th>Extra</th>
     </tr>
@@ -10,7 +13,6 @@
     <tbody>
     <% @projects.each do |project| %>
       <tr>
-        <td><%= project.id %></td>
         <td>
           <a href="/app/project/config/<%= project.id %>">
             <%= project.name %>

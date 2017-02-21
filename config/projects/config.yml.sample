@@ -2,8 +2,6 @@
 #- If your repository URL is example.com/some/repo.git
 #- in this case it will be some/repo/config.yml
 # This is a sample of project configuration in YAML format
-# All comments started with "#" will be removed
-# Please keep indents, they are part of syntax
 receivers:
   slack:
     # slack receivers for teams

@@ -17,12 +17,12 @@ module GitlabHook
 
     def init(project_path)
       # define path and code
-      @project             = project_path.chomp('/').reverse.chomp('/').reverse
-      @project_code        = @project.gsub(/[^A-z0-9]+/, '_').downcase
+      @project = project_path.chomp('/').reverse.chomp('/').reverse
+      @project_code = @project.gsub(/[^A-z0-9]+/, '_').downcase
       @project_config_file = configatron.app.path.base.projects + '/' + @project + '/config.yml'
 
       # read config
-      configatron.projects[@project_code]          = GitlabHook::Config::read @project_config_file
+      configatron.projects[@project_code] = GitlabHook::Config::read @project_config_file
       configatron.projects[@project_code + '_raw'] = GitlabHook::Config::read_raw @project_config_file
     end
 
@@ -69,17 +69,14 @@ module GitlabHook
         raise GitlabHook::Error, 'Empty content.'
       end
 
-      content = content.gsub(/^#[^\n\r]*/m, '')
-                  .gsub(/^[\n]+/m, '')
-
       # create dirs in case they don't exist
       until Dir.exist? File.dirname(@project_config_file)
         FileUtils.mkdir_p File.dirname(@project_config_file)
       end
 
-      fw = File.open(@project_config_file, 'w')
-      fw.write content
-      fw.close
+      File.open(@project_config_file, 'w')
+          .write(content)
+          .close
     end
 
     ##

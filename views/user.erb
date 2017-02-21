@@ -17,20 +17,19 @@
 </div>
 
 <dl class="dl-horizontal">
-  <dt><label>Gitlab username:</label></dt>
+  <dt class="span-6">Gitlab username:</dt>
   <dd><p><%= @user.username %>&nbsp;</p></dd>
   <dt>Team:</dt>
   <dd><p><%= @user_config.team %>&nbsp;</p></dd>
   <dt>Slack username:</dt>
   <dd><p><%= @user_config.service_username %>&nbsp;</p></dd>
+  <dt>Ignore Assignee <br>messages:</dt>
+  <dd><p><%= @user_config.ignore_assignee.to_s %>&nbsp;</p></dd>
 </dl>
 <div class="form-group">
   <label for="config_input">User configuration file content:</label>
   <textarea class="form-control" rows="10" readonly id="config_input"><%= @content %></textarea>
 </div>
-<p>
-  Please be careful on update this configuration. Broken configuration will break webhook functionality.
-</p>
 <div class="form-group">
   <a href="/app/user" class="btn btn-info" role="button">Back</a>
 </div>

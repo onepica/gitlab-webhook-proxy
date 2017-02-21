@@ -1,6 +1,8 @@
-# This is a sample configuration
-## Define a default team which a user does belongs to
+# Default team which the user does belongs to
 team: 'FE'
 slack:
-  # define custom slack username if it's different
+  # Custom slack username
   username: 'user.name'
+
+# Ignore assignee messages in requests
+#ignore_assignee: true
