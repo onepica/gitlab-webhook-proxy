@@ -1,0 +1,7 @@
+connect='proxy-slack.cc'
+remote_base_dir='/code'
+local_base_dir='./'
+
+connect='docker-centos'
+local_base_dir='./'
+remote_base_dir='/srv/html/gitlab-webhook-proxy'
