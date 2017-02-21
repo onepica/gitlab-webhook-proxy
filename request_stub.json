@@ -2,7 +2,7 @@
   "object_kind": "merge_request",
   "user": {
     "name": "John Doe",
-    "username": "u.sername",
+    "username": "john.doe",
     "avatar_url": "https://git.example.com/uploads/user/avatar/43/have_fun_nissou_blogphotography1__2_.jpg"
   },
   "repository": {
@@ -14,7 +14,7 @@
   "object_attributes": {
     "id": 2683,
     "target_branch": "master",
-    "source_branch": "feature/FISH-156",
+    "source_branch": "feature/PRJ1-156",
     "source_project_id": 334,
     "author_id": 43,
     "assignee_id": 43,
