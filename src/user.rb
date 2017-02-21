@@ -11,15 +11,17 @@ module GitlabHook
     attr_reader :data
 
     def initialize(id, data: nil)
-      @data = data || gitlab_super.user(id)
+      @data = data
+      @data = load_user(id) if id && data.nil?
 
-      if @data
-        configatron.users[@data.username] = read(config_file)
-      end
+      configatron.users[@data.username] = read(config_file) if @data
     end
 
-    def config
-      configatron.users[@data.username]
+    def config(key = nil)
+      config = configatron.users[@data.username]
+      return nil unless config
+
+      key ? config[key] : config
     end
 
     def config_raw
@@ -27,7 +29,7 @@ module GitlabHook
     end
 
     def config_file
-      configatron.app.path.base.users + '/' + @data.username + '.yml'
+      configatron.app.path.base.users + '/' + @data.username + '.yml' if @data and @data.username
     end
 
     def config_raw=(content)
@@ -54,6 +56,17 @@ module GitlabHook
       return nil unless config
       return nil unless config[service]
       config[service]['username']
+    end
+
+    def username
+      return nil unless @data
+      @data.username
+    end
+
+    protected
+
+    def load_user(id)
+      gitlab_super.user(id)
     end
   end
 end

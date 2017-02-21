@@ -157,23 +157,24 @@ end
 post '/inbound' do
   require_relative 'src/inbound'
 
-  begin
-    output = ''
-    if request.body.nil? or request.body.empty?
-      return 'error: Invalid request.'
-    end
-    request_data = JSON.parse request.body
+  if !request.body or request.body.nil?
+    return 'error: Invalid request.'
+  end
 
-    GitlabHook::Project::init(
+  request_data = JSON.parse request.body
+
+  GitlabHook::Project::init(
       URI(request_data['repository']['homepage']).path
-    )
+  )
+
+  begin
     GitlabHook::Inbound.new.forward request_data
   rescue GitlabHook::Error => e
     response.status = 404
-    output = "error [#{e.class}]: #{e.message}\n#{e.backtrace}"
+    return "error [#{e.class}]: #{e.message}"
   rescue => e
     response.status = 503
-    output = "error [#{e.class}]: #{e.message}\n#{e.backtrace}"
+    return "error [#{e.class}]"
+    # return "error [#{e.class}]: #{e.message}\n#{e.backtrace.join("\n")}"
   end
-  output
 end

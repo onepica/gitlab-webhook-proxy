@@ -3,29 +3,84 @@ require 'gitlab'
 require_relative 'gitlab_client/client'
 
 module GitlabHook
-  module MergeRequest
-    extend GitlabHook::GitlabClient::Client
+  class MergeRequest
+    include GitlabHook::GitlabClient::Client
 
-    module_function
+    @request_data
+    @user_author
+    @user_assignee
+
+    def initialize(request_data)
+      @request_data = request_data
+    end
+
+    # module_function
 
     # @return [Array]
     def fetch_labels(project_id, merge_id)
-      gitlab_super
-        .merge_request(project_id, merge_id).labels
+      # gitlab_super
+      #   .merge_request(project_id, merge_id).labels
+
+      %w(FE BE)
     end
 
-    def match_receiver(data)
+    def match_receivers
+      receivers = {
+          team: [],
+          assignee: [],
+      }
+
       fetch_labels(
-        data['object_attributes']['target_project_id'], data['object_attributes']['id']
+          @request_data['object_attributes']['target_project_id'], @request_data['object_attributes']['id']
       ).each do |label|
-        team = GitlabHook::Project.team_by_label label
-        return GitlabHook::Project.find_receiver team, 'slack' if team
+        team = project.team_by_label label
+        if team
+          receivers[:team] << project.find_receiver(team, 'slack')
+        end
       end
 
-      if data['object_attributes']['assignee_id']
-        team = GitlabHook::User.new(data['object_attributes']['assignee_id']).config['team']
-        return GitlabHook::Project.find_receiver team, 'slack' if team
+      # it couldn't determine a receiver
+      # Try find it by author
+      if receivers.empty? and user_author.team
+        receivers[:team] << project.find_receiver(user_author.team, 'slack')
       end
+
+      # Send personal message to assignee
+      # User or Project should have config "ignore_assignee: true" to ignore it
+      # User flag has higher priority
+      if ((!user_assignee.config('ignore_assignee').nil? and
+          false == user_assignee.config('ignore_assignee')) or
+          (user_assignee.config('ignore_assignee').nil? and
+              true != project.config('ignore_assignee'))
+      ) and user_assignee.service_username('slack')
+        receivers[:assignee] << '@' + user_assignee.service_username('slack')
+      end
+
+      receivers
+    end
+
+    def user_author
+      until @user_author
+        @user_author = user(@request_data['object_attributes']['author_id'])
+      end
+      @user_author
+    end
+
+    def user_assignee
+      until @user_assignee
+        @user_assignee = user(@request_data['object_attributes']['assignee_id'])
+      end
+      @user_assignee
+    end
+
+    protected
+
+    def user(id)
+      GitlabHook::User.new(id)
+    end
+
+    def project
+      GitlabHook::Project
     end
   end
 end

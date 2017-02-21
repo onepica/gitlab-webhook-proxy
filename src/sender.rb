@@ -1,6 +1,9 @@
 require 'erb'
+
 require 'ostruct'
+
 # https://github.com/stevenosloan/slack-notifier
+
 require 'slack-notifier'
 
 module GitlabHook
@@ -12,19 +15,27 @@ module GitlabHook
     # @param options [Hash] receiver:, username:, :template
     #
     def send(data, options)
-      message = load_message data: data, options[:template]
-      slack_client(options).ping(message)
+      return false if options[:channel].nil?
+
+      slack_client(options).ping(
+          load_message data: data, template: options[:template]
+      )
     end
 
     # @param [Hash] options
     # @return [Slack::Notifier]
     def slack_client(options)
-        Slack::Notifier.new options[:webhook_url] || configatron.app.slack.webhook_url,
-                            options do
-        defaults  username: 'GitLabHook'
-      end
+      url = options[:webhook_url] || configatron.app.slack.webhook_url
+      Slack::Notifier.new url,
+                          username: (options[:username] ||
+                              configatron.app.slack.bot_username ||
+                              'gitlab bot'),
+                          channel: (options[:channel] || nil)
     end
 
+    ##
+    # Load template message
+    #
     # @param [Hash] data
     # @param [String] template
     # @return [String]

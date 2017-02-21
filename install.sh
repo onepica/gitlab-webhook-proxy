@@ -13,4 +13,4 @@ __file="${__dir}/$(basename "${BASH_SOURCE[0]}")"
 readonly __dir __file
 
 #bundle install --path ${__dir}/bundle_install
-bundle install --system || bundle update --system
+bundle install || bundle update

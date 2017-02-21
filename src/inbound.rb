@@ -2,7 +2,9 @@ require 'configatron'
 require 'yaml'
 
 require_relative 'merge_request'
+
 require_relative 'sender'
+
 require_relative 'error'
 
 module GitlabHook
@@ -12,13 +14,15 @@ module GitlabHook
         raise GitlabHook::Error, 'Only merge_request allowed.'
       end
 
-      receiver = GitlabHook::MergeRequest.match_receiver data
+      receivers = GitlabHook::MergeRequest.new(data).match_receivers
 
-      pp receiver
-      exit 34
+      if receivers[:team] or receivers[:assignee]
+        receivers[:team].each do |receiver|
+          GitlabHook::Sender.new.send(data, {channel: receiver})
+        end
 
-      if receiver
-        GitlabHook::Sender.new.send(data, {receiver: receiver})
+        GitlabHook::Sender.new.send(data, {receiver: receivers[:assignee]}) if receivers[:assignee]
+
         return true
       end
 
