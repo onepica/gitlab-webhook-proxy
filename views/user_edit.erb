@@ -1,0 +1,43 @@
+<style>
+  #user_configuration {
+    font-family: Consolas, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
+  }
+
+  .title_label {
+    color: #777777;
+    font-size: 0.8em;
+  }
+
+  .user_name_header {
+  }
+</style>
+
+<div class="form-group">
+  <a href="/app/user" class="btn btn-info" role="button">Back</a>
+</div>
+
+<div class="form-group container">
+  <div class="row-fluid">
+    <h1>
+      <span class="user_name_header"><%= @user.name %></span>
+    </h1>
+  </div>
+</div>
+<form action="/app/user/save/config" method="post">
+  <div class="form-group">
+    <input class="btn primary" type='submit' value='Save'>
+  </div>
+  <div class="form-group">
+    <label for="user_configuration">User configuration file content:</label>
+    <textarea class="form-control" rows="10" id="user_configuration" name="config"><%= @content %></textarea>
+  </div>
+  <p>
+    Please be careful on update this configuration. Broken configuration will break webhook functionality.
+  </p>
+  <div class="form-group">
+    <input class="btn primary" type='submit' value='Save'>
+  </div>
+</form>
+<div class="form-group">
+  <a href="/app/user" class="btn btn-info" role="button">Back</a>
+</div>

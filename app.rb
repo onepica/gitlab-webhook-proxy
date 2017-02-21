@@ -1,7 +1,6 @@
 require 'rubygems'
 require 'sinatra'
 
-
 # region Load configuration
 require 'configatron'
 require_relative 'config/app_default'
@@ -11,6 +10,11 @@ else
   require_relative 'config/app.dist'
 end
 # endregion
+
+require_relative 'src/project'
+require_relative 'src/user'
+require_relative 'src/gitlab_client/auth'
+require_relative 'src/gitlab_client/client'
 
 set :bind, configatron.app.web.ip
 set :port, configatron.app.web.port
@@ -30,12 +34,8 @@ helpers do
   end
 end
 
-layout_params = {}
-
 # @var [Sinatra::Request] request
 # @var [Sinatra::Response] response
-require 'pp'
-pp 'aaa'
 before '/app/*' do
   until logged
     session[:previous_url] = request.path
@@ -57,7 +57,6 @@ post '/login/attempt' do
 
   session[:auth] = {}
   begin
-    require_relative 'src/gitlab_client/auth'
     session[:auth][:token] = GitlabHook::GitlabClient::Auth::gitlab_user_token(
       username: params['username'], password: params['password']
     )
@@ -77,7 +76,6 @@ get '/logout' do
 end
 
 get '/app/project' do
-  require_relative 'src/gitlab_client/client'
   # Gitlab::PaginatedResponse
   @projects = GitlabHook::GitlabClient::Client::gitlab(session[:auth][:token]).projects
   erb :projects
@@ -87,12 +85,10 @@ get '/app/project/config/:id' do
   until params['id']
     redirect to (session[:previous_url] || '/')
   end
-  require_relative 'src/gitlab_client/client'
   # Gitlab::PaginatedResponse
   @project = GitlabHook::GitlabClient::Client::gitlab(session[:auth][:token]).project params['id']
   @project_path = @project.web_url
 
-  require_relative 'src/project'
   GitlabHook::Project::init(
     URI(@project.web_url).path
   )
@@ -104,6 +100,8 @@ get '/app/project/config/:id' do
                  .gsub(/[\n]{2,}/m, '')
   end
 
+  session[:previous_url] = request.path
+
   erb :project
 end
 
@@ -112,11 +110,8 @@ post '/app/project/save/config' do
     redirect to (session[:previous_url] || '/')
   end
 
-  require_relative 'src/gitlab_client/client'
-  # Gitlab::PaginatedResponse
   @project = GitlabHook::GitlabClient::Client::gitlab(session[:auth][:token]).project params['id']
 
-  require_relative 'src/project'
   GitlabHook::Project::init(
     URI(@project.web_url).path
   )
@@ -124,4 +119,37 @@ post '/app/project/save/config' do
 
   # redirect the user back
   redirect to (session[:previous_url] || '/')
+end
+
+get '/app/user' do
+  @user = GitlabHook::GitlabClient::Client::gitlab(session[:auth][:token]).user
+  @user_config = GitlabHook::User.new(@user.id, data: @user)
+  if @user_config.config
+    @content = @user_config.config_raw
+  else
+    @content = '# No content here yet. Press edit to add new configuration.' + @user_config.config.to_s
+  end
+  erb :user
+end
+
+get '/app/user/edit' do
+  # Gitlab::PaginatedResponse
+  @user = GitlabHook::GitlabClient::Client::gitlab(session[:auth][:token]).user
+  user_config = GitlabHook::User.new(@user.id, data: @user)
+  if user_config.config
+    @content = user_config.config_raw
+  else
+    @content = user_config.config_sample_raw
+  end
+  erb :user_edit
+end
+
+post '/app/user/save/config' do
+  @user = GitlabHook::GitlabClient::Client::gitlab(session[:auth][:token]).user
+
+  user_config = GitlabHook::User.new(@user.id, data: @user)
+  user_config.config_raw = params['config']
+
+  # redirect the user back
+  redirect to '/app/user'
 end

@@ -1,0 +1,6 @@
+# This is a sample configuration
+## Define a default team which a user does belongs to
+team: 'FE'
+slack:
+  # define custom slack username if it's different
+  username: 'user.name'

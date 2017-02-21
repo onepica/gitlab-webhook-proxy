@@ -43,12 +43,16 @@ module GitlabHook
     end
 
     def config_raw=(content)
+      unless content
+        raise GitlabHook::Error, 'Empty content.'
+      end
+      content = content.gsub(/^#[^\n\r]*/m, '')
+                  .gsub(/^[\n]+/m, '')
       until Dir.exist? File.dirname(@project_config_file)
         Dir.mkdir File.dirname(@project_config_file)
       end
       fw = File.open(@project_config_file, 'w')
-      fw.write content.gsub(/^#[^\n\r]*/m, '')
-                 .gsub(/^[\n]+/m, '')
+      fw.write content
       fw.close
     end
 
