@@ -1,5 +1,6 @@
 require 'configatron'
 require 'yaml'
+require 'rake/file_utils'
 require_relative 'error'
 require_relative 'config'
 
@@ -73,7 +74,7 @@ module GitlabHook
 
       # create dirs in case they don't exist
       until Dir.exist? File.dirname(@project_config_file)
-        Dir.mkdir File.dirname(@project_config_file)
+        FileUtils.mkdir_p File.dirname(@project_config_file)
       end
 
       fw = File.open(@project_config_file, 'w')
