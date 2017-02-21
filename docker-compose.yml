@@ -8,15 +8,15 @@ services:
     command: "bash run.sh"
     volumes:
       - '.:/code'
+      - './container_files/.bash_history:/root/.bash_history'
       # cache ruby lib files
-      - './.bash_history:/root/.bash_history'
       - '/root/.gem'
       - '/root/.bundle/cache'
       - './bundle_global_gems:/usr/local/bundle/gems'
       - '/usr/local/bundle'
     ports:
-      - '5744:22'
-      - '5802:80'
+      - '8747:22'
+      - '8805:80'
 #  nginx:
 #    container_name: proxy-slack_nginx
 #    hostname: proxy-slack-nginx
