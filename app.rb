@@ -32,6 +32,13 @@ helpers do
   def logged
     session[:identity] and session[:auth] and session[:auth][:token]
   end
+
+  def project_has_config(project)
+    GitlabHook::Project::init(
+        URI(project.web_url).path
+    )
+    GitlabHook::Project::has_config?
+  end
 end
 
 # @var [Sinatra::Request] request
