@@ -2,17 +2,38 @@
   #project_configuration {
     font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
   }
+
+  .title_label {
+    color: #777777;
+    font-size: 0.8em;
+  }
+  .project_name_header {
+  }
 </style>
 
 <div class="form-group">
 <a href="/app/project" class="btn btn-info" role="button">Back</a>
 </div>
-
-<h1><%= @project.name %></h1>
 <div class="form-group">
-  <label for="project_configuration">Configuration file content:</label>
-  <textarea class="form-control" rows="20" id="project_configuration"><%= @content%></textarea>
+  <h1><span class="title_label">Project</span> <span class="project_name_header">&laquo;<%= @project.name %>&raquo;</span></h1>
 </div>
+
+<form action="/app/project/save/config" method="post">
+  <div class="form-group">
+    <input class="btn primary" type='submit' value='Save'>
+  </div>
+  <div class="form-group">
+    <label for="project_configuration">Configuration file content:</label>
+    <textarea class="form-control" name="config" rows="20" id="project_configuration"><%= @content %></textarea>
+    <input type="hidden" value="<%= @project.id %>" name="id">
+  </div>
+  <p>
+    Please be careful on update this configuration. Broken configuration will break webhook functionality.
+  </p>
+  <div class="form-group">
+    <input class="btn primary" type='submit' value='Save'>
+  </div>
+</form>
 <div class="form-group">
   <a href="/app/project" class="btn btn-info" role="button">Back</a>
 </div>

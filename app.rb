@@ -84,22 +84,44 @@ get '/app/project' do
 end
 
 get '/app/project/config/:id' do
+  until params['id']
+    redirect to (session[:previous_url] || '/')
+  end
   require_relative 'src/gitlab_client/client'
   # Gitlab::PaginatedResponse
   @project = GitlabHook::GitlabClient::Client::gitlab(session[:auth][:token]).project params['id']
   @project_path = @project.web_url
 
-  begin
-    require_relative 'src/project'
-    GitlabHook::Project::init(
-      URI(@project.web_url).path
-    )
+  require_relative 'src/project'
+  GitlabHook::Project::init(
+    URI(@project.web_url).path
+  )
+  if GitlabHook::Project::has_config?
     @content = GitlabHook::Project::config_raw
-  rescue GitlabHook::Error => e
+  else
     @content = GitlabHook::Project::config_sample_raw
                  .gsub(/^#-[^\n\r]*/m, '')
                  .gsub(/[\n]{2,}/m, '')
   end
 
   erb :project
+end
+
+post '/app/project/save/config' do
+  until params['id']
+    redirect to (session[:previous_url] || '/')
+  end
+
+  require_relative 'src/gitlab_client/client'
+  # Gitlab::PaginatedResponse
+  @project = GitlabHook::GitlabClient::Client::gitlab(session[:auth][:token]).project params['id']
+
+  require_relative 'src/project'
+  GitlabHook::Project::init(
+    URI(@project.web_url).path
+  )
+  GitlabHook::Project::config_raw = params['config']
+
+  # redirect the user back
+  redirect to (session[:previous_url] || '/')
 end

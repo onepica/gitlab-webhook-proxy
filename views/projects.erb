@@ -4,7 +4,7 @@
     <tr>
       <th>ID</th>
       <th>Name</th>
-      <th>Action/s</th>
+      <th>Extra</th>
     </tr>
     </thead>
     <tbody>
@@ -12,13 +12,13 @@
       <tr>
         <td><%= project.id %></td>
         <td>
-          <a href="<%= project.web_url %>">
+          <a href="/app/project/config/<%= project.id %>">
             <%= project.name %>
           </a>
         </td>
         <td>
-          <a href="/app/project/config/<%= project.id %>">
-            Configure
+          <a href="<%= project.web_url %>">
+            Home page
           </a>
         </td>
       </tr>

@@ -22,13 +22,10 @@ module GitlabHook
       # read config
       configatron.projects[@project_code]          = GitlabHook::Config::read @project_config_file
       configatron.projects[@project_code + '_raw'] = GitlabHook::Config::read_raw @project_config_file
+    end
 
-      # validate config existence
-      if configatron.projects[@project_code].nil?
-        raise GitlabHook::Error,
-              sprintf('Project configuration file "%s" not found.',
-                      @project_config_file)
-      end
+    def has_config?
+      configatron.projects[@project_code]
     end
 
     def config
@@ -43,6 +40,16 @@ module GitlabHook
         raise GitlabHook::Error, 'Project is not defined.'
       end
       configatron.projects[@project_code + '_raw']
+    end
+
+    def config_raw=(content)
+      until Dir.exist? File.dirname(@project_config_file)
+        Dir.mkdir File.dirname(@project_config_file)
+      end
+      fw = File.open(@project_config_file, 'w')
+      fw.write content.gsub(/^#[^\n\r]*/m, '')
+                 .gsub(/^[\n]+/m, '')
+      fw.close
     end
 
     def config_sample_raw
