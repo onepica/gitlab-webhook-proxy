@@ -93,6 +93,13 @@ module GitlabHook
       config['labels'][label]
     end
 
+    def find_user_team(username)
+      return nil until config['teams']
+      config['teams'].each do |team, users|
+        return team if users.include? username
+      end
+    end
+
     def find_receiver(team, type)
       return nil until config['receivers']
       return nil until config['receivers'][type]

@@ -42,7 +42,9 @@ module GitlabHook
       # it couldn't determine a receiver
       # Try find it by author
       if receivers.empty? and user_author.team
-        receivers[:team] << project.find_receiver(user_author.team, 'slack')
+        # pick up an author's team from project config or from user config
+        receivers[:team] <<
+            (project.find_user_team(user_author.username) || project.find_receiver(user_author.team, 'slack'))
       end
 
       # Send personal message to assignee
