@@ -21,7 +21,7 @@ module GitlabHook
           GitlabHook::Sender.new.send(data, {channel: receiver})
         end
 
-        GitlabHook::Sender.new.send(data, {receiver: receivers[:assignee]}) if receivers[:assignee]
+        GitlabHook::Sender.new.send(data, {channel: receivers[:assignee]}) if receivers[:assignee]
 
         return true
       end
