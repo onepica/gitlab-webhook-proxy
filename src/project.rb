@@ -74,9 +74,9 @@ module GitlabHook
         FileUtils.mkdir_p File.dirname(@project_config_file)
       end
 
-      File.open(@project_config_file, 'w')
-          .write(content)
-          .close
+      fw = File.open(@project_config_file, 'w')
+      fw.write(content)
+      fw.close
     end
 
     ##

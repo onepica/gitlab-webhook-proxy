@@ -36,9 +36,9 @@ module GitlabHook
       unless content
         raise GitlabHook::Error, 'Empty content.'
       end
-      File.open(config_file, 'w')
-          .write(content)
-          .close
+      fw = File.open(config_file, 'w')
+      fw.write(content)
+      fw.close
     end
 
     def config_sample_raw
