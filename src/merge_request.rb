@@ -55,7 +55,7 @@ module GitlabHook
           (user_assignee.config('ignore_assignee').nil? and
               true != project.config('ignore_assignee'))
       ) and user_assignee.service_username('slack')
-        receivers[:assignee] << '@' + user_assignee.service_username('slack')
+        receivers[:assignee] = '@' + user_assignee.service_username('slack')
       end
 
       receivers
