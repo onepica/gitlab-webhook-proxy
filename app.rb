@@ -39,6 +39,13 @@ helpers do
     )
     GitlabHook::Project::has_config?
   end
+
+  def project_webhook_url
+    (configatron.app.web.port == '443' ? 'https' : 'http') + '://' +
+        configatron.app.web.host +
+        (configatron.app.web.port != '80' ? ':' + configatron.app.web.port : '') +
+        '/inbound/' + configatron.app.web.inbound_token
+  end
 end
 
 # @var [Sinatra::Request] request
@@ -172,14 +179,19 @@ post '/app/user/save/config' do
 end
 
 # --------------------
-post '/inbound' do
+post '/inbound/:token' do
   require_relative 'src/inbound'
 
-  if !request.body or request.body.nil?
-    return 'error: Invalid request.'
+  if params['token'] != configatron.app.web.inbound_token
+    return 'error: Invalid token.'
   end
 
-  request_data = JSON.parse request.body
+  request.body.rewind
+  request_data = JSON.parse request.body.read
+
+  if !request_data or request_data.nil?
+    return 'error: Invalid request.'
+  end
 
   GitlabHook::Project::init(
       URI(request_data['repository']['homepage']).path
