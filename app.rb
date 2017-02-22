@@ -209,10 +209,13 @@ post '/inbound/:token' do
     GitlabHook::Inbound.new.forward request_data
   rescue GitlabHook::Error => e
     response.status = 404
+    # debug
+    puts "error [#{e.class}]: #{e.message}\n#{e.backtrace.join("\n")}"
     return "error [#{e.class}]: #{e.message}"
   rescue => e
     response.status = 503
+    # debug
+    puts "error [#{e.class}]: #{e.message}\n#{e.backtrace.join("\n")}"
     return "error [#{e.class}]"
-    # return "error [#{e.class}]: #{e.message}\n#{e.backtrace.join("\n")}"
   end
 end
