@@ -46,6 +46,14 @@ helpers do
         (configatron.app.web.port != '80' ? ':' + configatron.app.web.port : '') +
         '/inbound/' + configatron.app.web.inbound_token
   end
+
+  def project_template
+    GitlabHook::Project::config_sample_raw
+  end
+
+  def user_template
+    GitlabHook::User.new(nil).config_sample_raw
+  end
 end
 
 # @var [Sinatra::Request] request

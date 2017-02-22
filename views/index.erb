@@ -1,2 +1,36 @@
 <h1>GitLab Webhook Router</h1>
 <p>Please pick up menu item.</p>
+<style>
+  .container .row {
+    margin-top: 0.3em;
+  }
+</style>
+<div class="container">
+  <div class="row">
+    <a class="btn btn-primary" data-toggle="collapse" href="#collapse_project_template" aria-expanded="false"
+       aria-controls="collapse_project_template">
+      Project Configuration Template
+    </a>
+  </div>
+  <div class="row">
+    <div class="collapse" id="collapse_project_template">
+      <textarea class="form-control" rows="10" readonly id="config_input"><%= project_template %></textarea>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <div class="row">
+    <a class="btn btn-primary" data-toggle="collapse" href="#collapse_user_template" aria-expanded="false"
+       aria-controls="collapse_user_template">
+      User Configuration Template
+    </a>
+  </div>
+  <div class="row">
+    <div class="collapse" id="collapse_user_template">
+      <textarea class="form-control" rows="10" readonly id="config_input"><%= user_template %></textarea>
+    </div>
+  </div>
+</div>
+
+
+
