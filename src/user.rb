@@ -18,10 +18,10 @@ module GitlabHook
     end
 
     def config(key = nil)
-      config = configatron.users[@data.username]
-      return nil unless config
+      return nil unless @data and @data.username
+      return nil unless configatron.users[@data.username]
 
-      key ? config[key] : config
+      key ? configatron.users[@data.username][key] : configatron.users[@data.username]
     end
 
     def config_raw
@@ -62,6 +62,11 @@ module GitlabHook
     def username
       return nil unless @data
       @data.username
+    end
+
+    def name
+      return nil unless @data
+      @data.name
     end
 
     protected

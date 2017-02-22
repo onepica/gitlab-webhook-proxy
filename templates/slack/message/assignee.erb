@@ -1,0 +1,7 @@
+<%= "#{data['object_attributes']['url']}" %>
+<% if data['object_attributes']['assignee_id'] %>There is an update in *<%= "#{data['object_attributes']['title']}" %>*
+<% else %>Hi, you have got a merge request in *<%= "#{data['repository']['name']}" %>*. It's been assigned to you. Please take a look.<% end %>
+`<%= "#{data['object_attributes']['source_branch']}" %>` => `<%= "#{data['object_attributes']['target_branch']}" %>`
+Status: <%= data['object_attributes']['work_in_progress'] ? 'in progress' : 'not started' %> / <%= "#{data['object_attributes']['merge_status']}" %> / <%= "#{data['object_attributes']['state']}" %>
+
+

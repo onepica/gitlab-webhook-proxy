@@ -1,0 +1,5 @@
+<%= "#{data['object_attributes']['url']}" %>
+*<%= "#{data['object_attributes']['title']}" %>* `<%= "#{data['object_attributes']['action']}" %>` from <%= "#{data['user']['name']}" %> (`<%= "#{data['user']['username']}" %>`)
+<% if data['object_attributes']['assignee_id'] %>Assigned to *<%= user(data['object_attributes']['assignee_id']).name %>*<% end %>
+`<%= "#{data['object_attributes']['source_branch']}" %>` => `<%= "#{data['object_attributes']['target_branch']}" %>`
+Status: <%= data['object_attributes']['work_in_progress'] ? 'in progress' : 'not started' %> / <%= "#{data['object_attributes']['merge_status']}" %> / <%= "#{data['object_attributes']['state']}" %>
