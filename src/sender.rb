@@ -17,7 +17,7 @@ module GitlabHook
     def send(data, options)
       return false if options[:channel].nil?
 
-      puts slack_client(options).ping(
+      slack_client(options).ping(
           load_message data: data, template: options[:template]
       )
     end
@@ -58,7 +58,7 @@ module GitlabHook
       # end
 
       File.read(
-        File.expand_path(configatron.app.path.templates + '/slack/message.erb')
+        File.expand_path(configatron.app.path.templates + '/slack/message/default.erb')
       )
     end
   end
