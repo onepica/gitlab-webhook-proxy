@@ -17,7 +17,7 @@ module GitlabHook
     def send(data, options)
       return false if options[:channel].nil?
 
-      slack_client(options).ping(
+      puts slack_client(options).ping(
           load_message data: data, template: options[:template]
       )
     end
@@ -31,7 +31,7 @@ module GitlabHook
                           username: (options[:username] ||
                               configatron.app.slack.bot_username ||
                               'gitlab bot'),
-                          channel: (options[:channel] || nil)
+                          channel: options[:channel]
     end
 
     ##
