@@ -2,6 +2,7 @@
   .table .flag {
     text-align: center;
   }
+
   .table .last-right {
     text-align: right;
   }
@@ -11,40 +12,38 @@
   <p>Projects list according to access by your account.</p>
   <p>You may add the webhook URL
     for your project for "Merge Request events" only.
-    <br />
+    <br/>
     <code>
       <%= project_webhook_url %>
     </code>
   </p>
 </div>
-<div class="container">
-  <table class="table">
-    <thead>
+<table class="table">
+  <thead>
+  <tr>
+    <th>Name</th>
+    <th class="flag">Configured</th>
+    <th class="last-right">Extra</th>
+  </tr>
+  </thead>
+  <tbody>
+  <% @projects.each do |project| %>
     <tr>
-      <th>Name</th>
-      <th class="flag">Configured</th>
-      <th class="last-right">Extra</th>
+      <td>
+        <a href="/app/project/config/<%= project.id %>">
+          <%= project.name %>
+        </a>
+      </td>
+      <td class="flag">
+        <% if project_has_config project then %>
+          <div class="glyphicon glyphicon-ok"></div>
+        <% end %>
+      </td>
+      <td class="last-right">
+        <a href="<%= project.web_url %>">Home page</a> /
+        <a href="<%= project.web_url %>/hooks">Webhooks</a>
+      </td>
     </tr>
-    </thead>
-    <tbody>
-    <% @projects.each do |project| %>
-      <tr>
-        <td>
-          <a href="/app/project/config/<%= project.id %>">
-            <%= project.name %>
-          </a>
-        </td>
-        <td class="flag">
-          <% if project_has_config project then %>
-            <div class="glyphicon glyphicon-ok"></div>
-          <% end %>
-        </td>
-        <td class="last-right">
-          <a href="<%= project.web_url %>">Home page</a> /
-          <a href="<%= project.web_url %>/hooks">Webhooks</a>
-        </td>
-      </tr>
-    <% end %>
-    </tbody>
-  </table>
-</div>
+  <% end %>
+  </tbody>
+</table>
