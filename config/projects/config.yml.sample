@@ -8,7 +8,8 @@ receivers:
     BE: '#some-group-be'
     FE: '#some-group-fe'
 teams:
-  # declare teammates if they haven't declared globally
+  # declare teammate GitLab usernames if they haven't declared globally
+  # I.e. if a teammate haven't declared his team, you may do this here
   BE:
   - 'john.doe'
   - 'dave.brown'
