@@ -28,6 +28,7 @@ module GitlabHook
           assignee: [],
       }
 
+      # Determine receiver by a label
       fetch_labels(
           @request_data['object_attributes']['target_project_id'], @request_data['object_attributes']['id']
       ).each do |label|
@@ -37,8 +38,7 @@ module GitlabHook
         end
       end
 
-      # it couldn't determine a receiver
-      # Try find it by author
+      # if it couldn't determine a receiver try to find it by author
       if receivers.empty? and user_author.team
         # pick up an author's team from project config or from user config
         team = (project.find_user_team(user_author.username) || project.find_receiver(user_author.team, 'slack'))
