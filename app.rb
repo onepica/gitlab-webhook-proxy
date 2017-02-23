@@ -190,6 +190,9 @@ end
 post '/inbound/:token' do
   require_relative 'src/inbound'
 
+  # debug
+  puts "token: #{params['token']}"
+
   if params['token'] != configatron.app.web.inbound_token
     return 'error: Invalid token.'
   end
@@ -198,8 +201,13 @@ post '/inbound/:token' do
   request_data = JSON.parse request.body.read
 
   if !request_data or request_data.nil?
+    # debug
+    puts 'data: false'
     return 'error: Invalid request.'
   end
+
+  # debug
+  puts 'data: true'
 
   GitlabHook::Project::init(
       URI(request_data['repository']['homepage']).path
