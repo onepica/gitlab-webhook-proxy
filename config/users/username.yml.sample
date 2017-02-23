@@ -6,7 +6,7 @@ slack:
 
 # Ignore assignee's messages in requests
 # I.e. if TRUE system won't send a private message to you
-#ignore_assignee: true
+#ignore_assignee: false
 
 # If a (merge request) webhook have an assignee,
 # notify the team as well if TRUE
