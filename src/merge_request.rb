@@ -18,10 +18,8 @@ module GitlabHook
 
     # @return [Array]
     def fetch_labels(project_id, merge_id)
-      # gitlab_super
-      #   .merge_request(project_id, merge_id).labels
-
-      %w(FE BE)
+      gitlab_super
+        .merge_request(project_id, merge_id).labels
     end
 
     def match_receivers
