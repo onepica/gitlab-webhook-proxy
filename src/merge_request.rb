@@ -51,7 +51,6 @@ module GitlabHook
       if can_send_to_assignee?
         receivers[:assignee] = '@' + user_assignee.service_username('slack')
 
-        puts 'duplicate to team: ' + duplicate_message_to_team?.to_s
         # drop team receivers if user won't notify them
         receivers[:team] = [] unless duplicate_message_to_team?
       end
@@ -68,8 +67,8 @@ module GitlabHook
       receiver = project.find_receiver(
           project.team_by_user(user_author.username), 'slack'
       )
-      receiver = project.find_receiver(user_author.team, 'slack') unless receiver
-      puts 'receiver by author: ' + receiver.to_s
+      project.find_receiver(user_author.team, 'slack') unless receiver
+
       receiver
     end
 
