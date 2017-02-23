@@ -3,8 +3,8 @@ require 'erb'
 require 'ostruct'
 
 # https://github.com/stevenosloan/slack-notifier
-
 require 'slack-notifier'
+# https://api.slack.com/methods/chat.postMessage
 
 module GitlabHook
   class Sender
@@ -29,11 +29,14 @@ module GitlabHook
 
     def slack_client(options)
       url = options[:webhook_url] || configatron.app.slack.webhook_url
+      puts options[:icon_emoji] || ':large_orange_diamond:'
       Slack::Notifier.new url,
                           username: (options[:username] ||
                               configatron.app.slack.bot_username ||
                               'gitlab bot'),
-                          channel: options[:channel]
+                          channel: options[:channel],
+                          as_user: options[:as_user].nil? ? true : options[:as_user],
+                          icon_emoji: options[:icon_emoji] || ':large_orange_diamond:'
     end
 
     ##
@@ -81,10 +84,10 @@ module GitlabHook
     end
 
     def validate_template_name(name)
-      until name =~ /^[A-z0-9_.-]+$/
+      unless name =~ /^[A-z0-9_.-]+$/
         raise 'Invalid template name.'
       end
-      until File.exist? configatron.app.path.templates + '/slack/message/' + name + '.erb'
+      unless File.exist? configatron.app.path.templates + '/slack/message/' + name + '.erb'
         raise 'Template file does not exist.'
       end
 

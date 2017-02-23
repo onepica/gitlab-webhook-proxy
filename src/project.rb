@@ -70,7 +70,7 @@ module GitlabHook
       end
 
       # create dirs in case they don't exist
-      until Dir.exist? File.dirname(@project_config_file)
+      unless Dir.exist? File.dirname(@project_config_file)
         FileUtils.mkdir_p File.dirname(@project_config_file)
       end
 
@@ -89,21 +89,52 @@ module GitlabHook
     end
 
     def team_by_label(label)
-      return nil until config['labels']
+      return nil unless config['labels']
       config['labels'][label]
     end
 
-    def find_user_team(username)
-      return nil until config['teams']
-      config['teams'].each do |team, users|
+    ##
+    # Teams configuration
+    #
+    # @return [String]
+    #
+    def teams_config
+      config('teams')
+    end
+
+    ##
+    # Teams configuration
+    #
+    # @return [String]
+    #
+    def team_by_user(username)
+      return nil unless teams_config
+      teams_config.each do |team, users|
         return team if users.include? username
       end
     end
 
     def find_receiver(team, type)
-      return nil until config['receivers']
-      return nil until config['receivers'][type]
+      return nil unless config['receivers'] and config['receivers'][type]
       config['receivers'][type][team]
+    end
+
+    ##
+    # Check if inbound action is allowed
+    #
+    # @param [String] type This is a webhook type, like merge_request, push, etc.
+    # @param [String] action This is an action type of a webhook. E.g. for merge_request it can be merge, open, etc.
+    #
+    def action_allowed?(type, action)
+      # allow type/action "merge_request"/"open" by default
+      return true if type == 'merge_request' and action == 'open'
+
+      return false unless config['triggers'] and config['triggers'][type] and
+          config['triggers'][type]['action'] and
+          config['triggers'][type]['action'].kind_of?(Array) and
+          !config['triggers'][type]['action'].empty?
+
+      config['triggers'][type]['action'].include? action
     end
   end
 end

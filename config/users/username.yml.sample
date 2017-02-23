@@ -4,5 +4,12 @@ slack:
   # Custom slack username
   username: 'user.name'
 
-# Ignore assignee messages in requests
+# Ignore assignee's messages in requests
+# I.e. if TRUE system won't send a private message to you
 #ignore_assignee: true
+
+# If a (merge request) webhook have an assignee,
+# notify the team as well if TRUE
+# Be default send a private message to the assignee only
+# It will send a message to your team if you have "ignore_assignee: true"
+#duplicate_assigned_requests_to_team: false

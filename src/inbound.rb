@@ -4,23 +4,34 @@ require 'yaml'
 require_relative 'merge_request'
 
 require_relative 'sender'
+require_relative 'project'
 
 require_relative 'error'
+require_relative 'log_point'
 
 module GitlabHook
   class Inbound
     def forward(data)
-      if data['object_kind'] != 'merge_request'
-        raise GitlabHook::Error, 'Only merge_request allowed.'
+      unless Project::action_allowed? data['object_kind'], data['object_attributes']['action']
+        puts "action not allowed: #{data['object_kind']}, #{data['object_attributes']['action']}"
+        return false
       end
 
       receivers = GitlabHook::MergeRequest.new(data).match_receivers
 
-      puts receivers
-
       result = true
 
-      if receivers[:team] or receivers[:assignee]
+      if receivers[:assignee]
+        response = GitlabHook::Sender.new.send(data, {
+            channel: receivers[:assignee],
+            template_name: 'assignee',
+        })
+        result = (response and response.instance_of? Net::HTTPOK) ? result : false
+
+        log(receivers[:assignee], response)
+      end
+
+      if receivers[:team]
         receivers[:team].each do |receiver|
           response = GitlabHook::Sender.new.send(data, {
               channel: receiver,
@@ -28,25 +39,33 @@ module GitlabHook
           })
           result = (response and response.instance_of? Net::HTTPOK) ? result : false
 
-          # debug
-          puts receiver
-          puts response.class
-        end
-
-        if receivers[:assignee]
-          response = GitlabHook::Sender.new.send(data, {
-              channel: receivers[:assignee],
-              template_name: 'assignee',
-          })
-          result = (response and response.instance_of? Net::HTTPOK) ? result : false
-
-          # debug
-          puts receivers[:assignee]
-          puts response.class
+          log(receiver, response)
         end
       end
 
       result
+    end
+
+    protected
+
+    ##
+    # Log result of request
+    #
+    # @param [string] receiver
+    # @param [Net::HTTPOK] response
+    # @return self
+    #
+    def log(receiver, response)
+      unless response.instance_of? Net::HTTPOK.
+          LogPoint::write 'Cannot deliver to ' + receiver, 'slack_messages', Logger::WARN
+      end
+      LogPoint::write(
+        sprintf('Processed %s with status %s.', receiver, response.to_s),
+        'inbound',
+        Logger::INFO
+      )
+
+      self
     end
   end
 end
