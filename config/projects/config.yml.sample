@@ -4,7 +4,7 @@
 # This is a sample of project configuration in YAML format
 receivers:
   slack:
-    # slack receivers for teams
+    # slack channel declaration for a team
     BE: '#some-group-be'
     FE: '#some-group-fe'
 teams:
@@ -20,3 +20,14 @@ labels:
   # Format: LABEL: TEAM_NAME
   FE: FE
   BE: BE
+
+# Triggers list with allowed actions for processing
+triggers:
+  merge_request:
+    # It's allowed by default to use "open" and "reopened" action
+    action:
+    - open
+    - reopened
+#    - update
+#    - merge
+#    - close
