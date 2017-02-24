@@ -1,6 +1,7 @@
 require 'gitlab'
 
 require_relative 'gitlab_client/client'
+require_relative 'project'
 
 module GitlabHook
   class MergeRequest
@@ -9,16 +10,28 @@ module GitlabHook
     @request_data
     @user_author
     @user_assignee
+    @action_allowed
 
     def initialize(request_data)
       @request_data = request_data
+
+      @action_allowed = Project::action_allowed? @request_data['object_kind'],
+                                                 @request_data['object_attributes']['action']
+
+      unless @action_allowed
+        LogPoint::write sprintf(
+                            'action not allowed: %s, %s.',
+                            @request_data['object_kind'],
+                            @request_data['object_attributes']['action']
+                        ), 'inbound', Logger::WARN
+      end
     end
 
     ##
     # Fetch labels
     #
     # @return [Array]
-
+    #
     def fetch_labels
       gitlab_super
           .merge_request(
@@ -29,8 +42,19 @@ module GitlabHook
     def match_receivers
       receivers = {
           team: [],
-          assignee: [],
+          assignee: nil,
+          merged: nil,
       }
+
+      # "merge" action should be managed by a user at least
+      if @request_data['object_kind'] == 'merge' and
+          user_author.subscribed_for?('notify_merge', 'merge_request')
+        receivers[:merged] = '@' + user_author.service_username('slack')
+      end
+
+      unless @action_allowed
+        receivers
+      end
 
       # Determine receiver by a label
       fetch_labels.each do |label|
@@ -99,13 +123,13 @@ module GitlabHook
     protected
 
     def duplicate_message_to_team?
-      user_assignee.config('duplicate_assigned_requests_to_team')
+      user_assignee.subscribed_for?('duplicate_assigned_requests_to_team', 'merge_request')
     end
 
     def can_send_to_assignee?
-      ((!user_assignee.config('ignore_assignee').nil? and
-          false == user_assignee.config('ignore_assignee')) or
-          (user_assignee.config('ignore_assignee').nil? and
+      ((!user_assignee.subscribed_for?('assignment', 'merge_request').nil? and
+          true == user_assignee.subscribed_for?('assignment', 'merge_request')) or
+          (user_assignee.subscribed_for?('assignment', 'merge_request').nil? and
               true != project.config('ignore_assignee'))
       ) and user_assignee.service_username('slack')
     end

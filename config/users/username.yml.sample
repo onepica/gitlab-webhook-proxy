@@ -4,12 +4,17 @@ slack:
   # Custom slack username
   username: 'user.name'
 
-# Ignore assignee's messages in requests
-# I.e. if TRUE system won't send a private message to you
-#ignore_assignee: false
+subscribe:
+  merge_request:
+    # Set to FALSE to ignore assignee's messages in webhooks
+    # and system won't send a private message to you but it will be forwarded to a team channel
+    # Default: true
+    #assignment: true
 
-# If a (merge request) webhook have an assignee,
-# notify the team as well if TRUE
-# Be default send a private message to the assignee only
-# It will send a message to your team if you have "ignore_assignee: true"
-#duplicate_assigned_requests_to_team: false
+    # Be default it sends a private message to the assignee only
+    # It will send a message to your team if you have TRUE flag
+    # Default: false
+    #duplicate_assigned_requests_to_team: false
+
+    # Notify about merged requests. Default: false
+    #notify_merge: false

@@ -24,6 +24,13 @@ module GitlabHook
       key ? configatron.users[@data.username][key] : configatron.users[@data.username]
     end
 
+    def subscribed_for?(event, type)
+      return nil unless config('subscribe').kind_of? Hash and
+        config('subscribe')[type].kind_of? Hash
+
+      config('subscribe')[type][event]
+    end
+
     def config_raw
       read_raw config_file
     end
