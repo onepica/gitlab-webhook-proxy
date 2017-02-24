@@ -15,6 +15,7 @@ require_relative 'src/project'
 require_relative 'src/user'
 require_relative 'src/gitlab_client/auth'
 require_relative 'src/gitlab_client/client'
+require_relative 'src/log_point'
 
 set :bind, configatron.app.web.ip
 set :port, configatron.app.web.port
@@ -145,6 +146,12 @@ post '/app/project/save/config' do
     URI(@project.web_url).path
   )
   GitlabHook::Project::config_raw = params['config']
+
+  # log identity who updated a project
+  LogPoint::write 'Project config has been updated by ' + receiver,
+                  'project_' + GitlabHook::Project::project_code,
+                  Logger::INFO
+
 
   # redirect the user back
   redirect to (session[:previous_url] || '/')
