@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!--
+  See more info by the link
+  https://github.com/andkirby/commithook/blob/master/src/config/examples/pre-commit/Linter-SimplyLint.xml
+-->
+<config>
+  <validators>
+    <Linter-SimplyLint>
+      <rb>
+        <execution>
+          <interpreter_type>ruby</interpreter_type>
+          <linter>rubocop</linter>
+          <command>%interpreter% %linter% %file%</command>
+        </execution>
+      </rb>
+    </Linter-SimplyLint>
+  </validators>
+  <hooks>
+    <pre-commit>
+      <filetype>
+        <rb>
+          <validators>
+            <Linter-SimplyLint>1</Linter-SimplyLint>
+          </validators>
+        </rb>
+      </filetype>
+    </pre-commit>
+  </hooks>
+</config>

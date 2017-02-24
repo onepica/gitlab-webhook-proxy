@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<!-- This is a local configuration file. It is not used in external projects.-->
+<config>
+  <tracker>
+    <type>github</type>
+    <github>
+      <name>onepica</name>
+      <repository>gitlab-webhook-proxy</repository>
+    </github>
+  </tracker>
+</config>
