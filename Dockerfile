@@ -14,9 +14,6 @@ ADD container_files /container_files
 RUN echo \
   && apt-get update && apt-get -y install rlwrap sqlite3 \
   && touch /root/.bash_history \
-#  && apt-get install -y net-tools \
-#  && gem uninstall bundler \
-#  && gem install bundler \
   # keep history unique \
   && echo 'export HISTCONTROL=ignoreboth:erasedups' >> /root/.bashrc \
   && curl -Ls https://gist.github.com/andkirby/0e2982bee321aa611bc66385dee5f399/raw/bashrc_init_install.sh | bash \
@@ -33,4 +30,6 @@ RUN echo \
   && cat /container_files/authorized_keys > /root/.ssh/authorized_keys \
   && cat /container_files/id_rsa.pub >> /root/.ssh/authorized_keys \
   && chmod go-rwx -R /root/.ssh \
+  # declare ENV vars in ssh sessions
+  && cp /container_files/share-env.sh /etc/profile.d/ \
 
