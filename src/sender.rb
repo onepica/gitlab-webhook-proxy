@@ -102,6 +102,18 @@ module GitlabHook
       GitlabHook::User.new(id)
     end
 
+    def merge_request_title_message(data, format = '<%<merge_url>s|Merge Request %<merge_id>s> from *<%<project_url>s|%<project_name>s>*')
+      sprintf(
+          format,
+          {
+              merge_url: data['object_attributes']['url'],
+              merge_id: '#' + data['object_attributes']['iid'],
+              project_url: data['repository']['homepage'],
+              project_name: data['repository']['name'],
+          }
+      )
+    end
+
     protected
 
     ##

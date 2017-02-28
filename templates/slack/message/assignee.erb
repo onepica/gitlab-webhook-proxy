@@ -1,9 +1,14 @@
-<%= "#{data['object_attributes']['url']}" %>
-<% if data['object_attributes']['action'] == 'update' %>There is an update in *<%= "#{data['object_attributes']['title']}" %>*
-<% elsif data['object_attributes']['action'] == 'open' %>Hi, you have got a merge request in *<%= "#{data['repository']['name']}" %>*. It's been assigned to you. Please take a look.
-<% elsif data['object_attributes']['action'] == 'close' %>The merge request in *<%= "#{data['repository']['name']}" %>* has been closed.
-<% else %>Repository: *<%= "#{data['repository']['name']}" %>*<% end %>
+<% if data['object_attributes']['action'] == 'update' %>\
+  There is an _update_ in <%= merge_request_title_message(data) %>.
+<% elsif data['object_attributes']['action'] == 'open' %>\
+  Hi, the <%= merge_request_title_message(data) %> has been _created_ and _assigned_ to you. Please take a look.
+<% elsif data['object_attributes']['action'] == 'merge' %>\
+  The <%= merge_request_title_message(data) %> has been _merged_ into `<%= "#{data['object_attributes']['target_branch']}" %>`.
+<% elsif data['object_attributes']['action'] == 'close' %>\
+  The <%= merge_request_title_message(data) %> has been _closed_.
+<% elsif data['object_attributes']['action'] == 'reopened' %>\
+  The <%= merge_request_title_message(data) %> has been _reopened_.
+<% else %>\
+  `<%= data['object_attributes']['action'] %>` action in <%= merge_request_title_message(data) %>.
+<% end %>
 `<%= "#{data['object_attributes']['source_branch']}" %>` => `<%= "#{data['object_attributes']['target_branch']}" %>`
-Status: <%= data['object_attributes']['work_in_progress'] ? 'in progress' : 'not started' %> / <%= "#{data['object_attributes']['merge_status']}" %> / <%= "#{data['object_attributes']['state']}" %>
-
-
