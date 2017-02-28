@@ -17,6 +17,8 @@ services:
     ports:
       - '8747:22'
       - '8805:80'
+    env_file:
+    - ${DOCKER_ENV_NAME}app.env
 #  nginx:
 #    container_name: proxy-slack_nginx
 #    hostname: proxy-slack-nginx
