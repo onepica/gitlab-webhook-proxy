@@ -48,7 +48,11 @@ module GitlabHook
     #
     def load_message(data:, options: nil)
       @data = data
-      ERB.new(options[:template] || fetch_template(options[:template_name])).result(binding)
+      ERB.new(
+          filter_template(
+              options[:template] || fetch_template(options[:template_name])
+          )
+      ).result(binding)
     end
 
     ##
@@ -96,6 +100,18 @@ module GitlabHook
 
     def user(id)
       GitlabHook::User.new(id)
+    end
+
+    protected
+
+    ##
+    # Remove redundant line breaks market with back slash ("\")
+    #
+    # @param [String] template
+    # @return [String]
+    #
+    def filter_template(template)
+      template.gsub(/\\[\n][ ]*/, '')
     end
   end
 end
