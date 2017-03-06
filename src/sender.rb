@@ -107,7 +107,7 @@ module GitlabHook
           format,
           {
               merge_url: data['object_attributes']['url'],
-              merge_id: '#' + data['object_attributes']['iid'],
+              merge_id: '#' + data['object_attributes']['iid'].to_s,
               project_url: data['repository']['homepage'],
               project_name: data['repository']['name'],
           }
