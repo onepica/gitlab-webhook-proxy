@@ -10,10 +10,10 @@ module GitlabHook
     @project_config_file
     @project_code
 
-    attr_accessor :project
-    attr_accessor :project_code
-
     module_function
+
+    attr_reader :project
+    attr_reader :project_code
 
     def init(project_path)
       # define path and code
@@ -26,10 +26,23 @@ module GitlabHook
       configatron.projects[@project_code + '_raw'] = GitlabHook::Config::read_raw @project_config_file
     end
 
+    ##
+    # Attribute reader for @project_code
+    #
+    # @return [String]
+    #
+    def project_code
+      @project_code
+    end
+
+    ##
+    # Check if config exists for loaded project
+    #
+    # @return [TrueClass|FalseClass]
+    #
     def has_config?
       configatron.projects[@project_code]
     end
-
 
     ##
     # Get config
