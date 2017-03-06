@@ -29,5 +29,5 @@ triggers:
     - open
     - reopened
 #    - update
-#    - merge
-#    - close
+    - merge
+    - close
