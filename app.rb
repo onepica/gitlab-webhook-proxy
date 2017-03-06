@@ -148,7 +148,7 @@ post '/app/project/save/config' do
   GitlabHook::Project::config_raw = params['config']
 
   # log identity who updated a project
-  GitlabHook::LogPoint::write 'Project config has been updated by ' + receiver,
+  GitlabHook::LogPoint::write 'Project config has been updated by ' + session[:identity],
                   'project_' + GitlabHook::Project::project_code,
                   Logger::INFO
 
