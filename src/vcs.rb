@@ -6,7 +6,7 @@ module GitlabHook
   module Vcs
     @adapters = []
 
-    def vcs(type)
+    def adapter(type)
       if 'gitlab' == type
         return @adapters[type] if @adapters[type]
         @adapters[type] = new GitlabHook::VcsAdapter::GitlabVcs

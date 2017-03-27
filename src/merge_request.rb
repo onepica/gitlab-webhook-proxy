@@ -31,7 +31,7 @@ module GitlabHook
     # @return [Array]
     #
     def fetch_labels
-      GitlabHook::VcsAdapter::vcs('gitlab').super_user.merge_request(
+      GitlabHook::Vcs::adapter('gitlab').super_user.merge_request(
           @request_data['object_attributes']['target_project_id'], @request_data['object_attributes']['id']
       ).labels
     end

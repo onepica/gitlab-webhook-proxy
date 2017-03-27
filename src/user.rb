@@ -78,7 +78,7 @@ module GitlabHook
     protected
 
     def load_user(id)
-      GitlabHook::VcsAdapter::vcs('gitlab').user(id)
+      GitlabHook::Vcs::adapter('gitlab').user(id)
     end
   end
 end
