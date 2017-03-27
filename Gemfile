@@ -28,3 +28,7 @@ gem 'authlogic'
 # gem 'thor', '0.19.1'
 # gem 'rails', '~>5.0.0'
 # gem 'casein', '~>5.2.0'
+
+# TODO Add using simple form
+# https://github.com/plataformatec/simple_form
+# gem 'simple_form'
