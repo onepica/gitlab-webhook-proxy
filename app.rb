@@ -105,7 +105,7 @@ end
 # --------------------
 get '/app/project' do
   # Gitlab::PaginatedResponse
-  @projects = GitlabHook::GitlabClient::Client::gitlab(session[:auth][:token]).projects
+  @projects = GitlabHook::VcsAdapter::vcs('gitlab').client(session[:auth][:token]).projects
   erb :projects
 end
 
@@ -115,7 +115,7 @@ get '/app/project/config/:id' do
     redirect to (session[:previous_url] || '/')
   end
   # Gitlab::PaginatedResponse
-  @project = GitlabHook::GitlabClient::Client::gitlab(session[:auth][:token]).project params['id']
+  @project = GitlabHook::VcsAdapter::vcs('gitlab').client(session[:auth][:token]).project params['id']
   @project_path = @project.web_url
 
   GitlabHook::Project::init(
@@ -140,7 +140,7 @@ post '/app/project/save/config' do
     redirect to (session[:previous_url] || '/')
   end
 
-  @project = GitlabHook::GitlabClient::Client::gitlab(session[:auth][:token]).project params['id']
+  @project = GitlabHook::VcsAdapter::vcs('gitlab').client(session[:auth][:token]).project params['id']
 
   GitlabHook::Project::init(
     URI(@project.web_url).path
@@ -158,7 +158,7 @@ end
 
 # --------------------
 get '/app/user' do
-  @user = GitlabHook::GitlabClient::Client::gitlab(session[:auth][:token]).user
+  @user = GitlabHook::VcsAdapter::vcs('gitlab').client(session[:auth][:token]).user
   @user_config = GitlabHook::User.new(@user.id, data: @user)
   if @user_config.config
     @content = @user_config.config_raw
@@ -171,7 +171,7 @@ end
 # --------------------
 get '/app/user/edit' do
   # Gitlab::PaginatedResponse
-  @user = GitlabHook::GitlabClient::Client::gitlab(session[:auth][:token]).user
+  @user = GitlabHook::VcsAdapter::vcs('gitlab').client(session[:auth][:token]).user
   user_config = GitlabHook::User.new(@user.id, data: @user)
   if user_config.config
     @content = user_config.config_raw
@@ -183,7 +183,7 @@ end
 
 # --------------------
 post '/app/user/save/config' do
-  @user = GitlabHook::GitlabClient::Client::gitlab(session[:auth][:token]).user
+  @user = GitlabHook::VcsAdapter::vcs('gitlab').client(session[:auth][:token]).user
 
   user_config = GitlabHook::User.new(@user.id, data: @user)
   user_config.config_raw = params['config']

@@ -4,7 +4,6 @@ require_relative 'config'
 
 module GitlabHook
   class User
-    include GitlabHook::GitlabClient::Client
     include GitlabHook::Config
 
     @data
@@ -79,7 +78,7 @@ module GitlabHook
     protected
 
     def load_user(id)
-      gitlab_super.user(id)
+      GitlabHook::VcsAdapter::vcs('gitlab').user(id)
     end
   end
 end

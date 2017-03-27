@@ -1,12 +1,10 @@
 require 'gitlab'
 
-require_relative 'gitlab_client/client'
+require_relative 'vcs_adapter/gitlab_vcs'
 require_relative 'project'
 
 module GitlabHook
   class MergeRequest
-    include GitlabHook::GitlabClient::Client
-
     @request_data
     @user_author
     @user_assignee
@@ -33,10 +31,9 @@ module GitlabHook
     # @return [Array]
     #
     def fetch_labels
-      gitlab_super
-          .merge_request(
-              @request_data['object_attributes']['target_project_id'], @request_data['object_attributes']['id']
-          ).labels
+      GitlabHook::VcsAdapter::vcs('gitlab').super_user.merge_request(
+          @request_data['object_attributes']['target_project_id'], @request_data['object_attributes']['id']
+      ).labels
     end
 
     def match_receivers

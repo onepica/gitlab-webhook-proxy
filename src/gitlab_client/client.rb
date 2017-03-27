@@ -18,7 +18,11 @@ module GitlabHook
       end
 
       def user_name(id)
-        gitlab_super.user(id).username
+        user(id).username
+      end
+
+      def user(id)
+        gitlab_super.user(id)
       end
     end
   end
