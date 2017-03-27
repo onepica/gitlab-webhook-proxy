@@ -1,5 +1,4 @@
 require 'configatron'
-require_relative 'gitlab_client/client'
 require_relative 'config'
 
 module GitlabHook
@@ -9,6 +8,8 @@ module GitlabHook
     def adapter(type)
       if 'gitlab' == type
         return @adapters[type] if @adapters[type]
+
+        require_relative 'gitlab_client/client'
         @adapters[type] = new GitlabHook::VcsAdapter::GitlabVcs
       else
         raise "Type #{type} wasn't implemented yet."

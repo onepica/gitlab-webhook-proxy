@@ -1,5 +1,5 @@
 require 'configatron'
-require_relative 'vcs_adapter/gitlab_vcs'
+require_relative 'vcs'
 require_relative 'config'
 
 module GitlabHook

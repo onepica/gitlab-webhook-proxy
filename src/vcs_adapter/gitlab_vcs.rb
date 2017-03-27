@@ -25,6 +25,10 @@ module GitlabHook
       def user(id)
         @low_client::user(id)
       end
+
+      def merge_request(*args)
+        super_user.merge_request(*args)
+      end
     end
   end
 end
