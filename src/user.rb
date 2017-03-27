@@ -1,5 +1,5 @@
 require 'configatron'
-require_relative 'gitlab_client/client'
+require_relative 'vcs_adapter/gitlab_vcs'
 require_relative 'config'
 
 module GitlabHook

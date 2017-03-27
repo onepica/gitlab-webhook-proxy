@@ -16,6 +16,7 @@ require_relative 'src/user'
 require_relative 'src/gitlab_client/auth'
 require_relative 'src/gitlab_client/client'
 require_relative 'src/log_point'
+require_relative 'src/vcs_adapter/gitlab_vcs'
 
 set :bind, configatron.app.web.ip
 set :port, configatron.app.web.port
