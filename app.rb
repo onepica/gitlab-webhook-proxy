@@ -34,6 +34,10 @@ helpers do
     session[:identity] and session[:auth] and session[:auth][:token]
   end
 
+  def jira_logged
+    session[:jira_identity] and session[:jira_auth] and session[:jira_auth][:token]
+  end
+
   def project_has_config(project)
     GitlabHook::Project::init(
         URI(project.web_url).path
@@ -63,6 +67,14 @@ before '/app/*' do
   until logged
     session[:previous_url] = request.path
     @error                 = 'Sorry, you need to be logged into GitLab to visit this page.'
+    halt erb(:login_form)
+  end
+end
+
+before '/jira-app/*' do
+  until jira_logged
+    session[:previous_url] = request.path
+    @error                 = 'Sorry, you need to be logged into JIRA to visit this page.'
     halt erb(:login_form)
   end
 end
